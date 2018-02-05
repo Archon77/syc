@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import TableCell from './TableCell'
-import header from '../../api/data/header'
+import header from '../api/data/header'
 
 class TableItem extends Component {
     constructor(props) {
