@@ -1,0 +1,89 @@
+@import "../../colors.css";
+@import "../../media.css";
+
+
+.table-item-cell {
+  display: flex;
+  width: 160px;
+  justify-content: center;
+  align-items: center;
+  background: #6F83D6;
+  padding: 10px 15px;
+  border-left: 1px solid #1533AD;
+  transition: .2s;
+  
+  &:first-of-type {
+    display: flex;
+    width: 60px;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFB300;
+    color: #1533AD;
+  }
+  &:last-of-type {
+    border-right: 1px solid #1533AD;
+  }
+  
+  
+  &:hover {
+    
+    i {
+      opacity: 1;
+    }
+  }
+  
+  &--unlocked {
+    background: #fff;
+  }
+  &--sum {
+    background-color: #4965D6;
+    font-size: 20px;
+    color: #FFB300;
+  }
+  
+  &__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    &--content {
+      justify-content: space-between;
+    }
+  }
+  
+  
+  input {
+    max-width: 70px;
+    text-align: center;
+    transition: .2s;
+    
+    &:disabled {
+      background: #6F83D6;
+      color: #FFD573;
+      cursor: default;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  span {
+    margin: 0 5px;
+  }
+  i {
+    color: #FFD573;
+    opacity: 0;
+    transition: .2s;
+    cursor: pointer;
+    
+    &:hover {
+      color: #FFB300;
+    }
+  }
+}
+
+
+
+
+
+
+
+
