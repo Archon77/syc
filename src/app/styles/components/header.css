@@ -1,5 +1,5 @@
 .header {
-  background-color: #1533AD;
+  background-color: var(--blue4);
   
   &__inner {
     display: flex;
@@ -10,7 +10,7 @@
     margin-right: auto;
     padding-left:  366px;
     font-size: 30px;
-    color: #FFB300;
+    color: var(--yellow);
   }
   &-nav {
     display: -webkit-box;
@@ -20,7 +20,7 @@
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
-    color: #FFB300;
+    color: var(--yellow);
     
     &__item {
       padding: 20px;
@@ -28,7 +28,7 @@
       text-decoration: underline transparent;
       
       &:hover {
-        text-decoration: underline #FFB300;
+        text-decoration: underline var(--yellow);
       }
     }
   }

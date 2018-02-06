@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 import TableInner from './components/TableInner';
 import Header from './components/Header';
@@ -8,6 +8,12 @@ import Header from './components/Header';
 class App extends Component {
     constructor(props) {
         super(props);
+        
+        // console.log();
+    
+        this.props.table.forEach(function (item) {
+            console.log(item);
+        });
 
         this.state = {
             table: this.props.table
