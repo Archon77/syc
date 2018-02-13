@@ -66,4 +66,4 @@ app.post('/api/todos', (req, res) => {
 //     res.sendStatus(204);
 // });
 
-app.listen(5000, 'localhost');
+app.listen(5000,() => console.log('Сервер создан'));

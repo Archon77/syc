@@ -23,3 +23,7 @@ src/dist/*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/src/*.css
+/src/*/*.css
+/src/*/*/*.css
+/src/*/*/*/*.css

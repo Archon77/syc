@@ -12,7 +12,7 @@
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "server": "node server",
+    "server": "node src/api/index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
