@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 
 import TableInner from './components/TableInner';
 import Header from './components/Header';
@@ -11,15 +11,22 @@ class App extends Component {
         
         // console.log();
     
-        this.props.table.forEach(function (item) {
-            console.log(item);
-        });
+        // this.props.table.forEach(function (item) {
+        //     console.log(item);
+        // });
 
         this.state = {
-            table: this.props.table
+            table: []
         };
     }
-
+    
+    componentDidMount() {
+        axios.get('http://localhost:3000/api/data/table')
+            .then(response => response.data)
+            .then(table => this.setState({ table }))
+            .catch(error => console.error(error.message));
+    }
+    
     render() {
         return (
             <div className="App">

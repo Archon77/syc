@@ -3,9 +3,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const todos = require('./todos');
+const table = require('./data/table');
 
-let nextId = 4;
+// let nextId = 4;
 
 const app = express();
 
@@ -16,50 +16,54 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/todos', (req, res) => {
-    res.send(todos);
+app.get('/api/data/table', (req, res) => {
+    res.send(table);
 });
 
 app.post('/api/todos', (req, res) => {
-    let todo = {
-        id: nextId++,
-        title: req.body.title,
-        completed: false
-    };
-
-    todos.push(todo);
-
-    res.send(todo);
+    res.send(table);
 });
 
-app.put('/api/todos/:id', (req, res) => {
-    let todo = todos.find(todo => todo.id == req.params.id);
-
-    if (!todo) return res.sendStatus(404);
-
-    todo.title = req.body.title || todo.title;
-
-    res.json(todo);
-});
-
-app.patch('/api/todos/:id', (req, res) => {
-    let todo = todos.find(todo => todo.id == req.params.id);
-
-    if (!todo) return res.sendStatus(404);
-
-    todo.completed = !todo.completed;
-
-    res.json(todo);
-});
-
-app.delete('/api/todos/:id', (req, res) => {
-    let index = todos.findIndex(todo => todo.id == req.params.id);
-
-    if (index === -1) return res.sendStatus(404);
-
-    todos.splice(index, 1);
-
-    res.sendStatus(204);
-});
+// app.post('/api/todos', (req, res) => {
+//     let todo = {
+//         id: nextId++,
+//         title: req.body.title,
+//         completed: false
+//     };
+//
+//     todos.push(todo);
+//
+//     res.send(todo);
+// });
+//
+// app.put('/api/todos/:id', (req, res) => {
+//     let todo = todos.find(todo => todo.id == req.params.id);
+//
+//     if (!todo) return res.sendStatus(404);
+//
+//     todo.title = req.body.title || todo.title;
+//
+//     res.json(todo);
+// });
+//
+// app.patch('/api/todos/:id', (req, res) => {
+//     let todo = todos.find(todo => todo.id == req.params.id);
+//
+//     if (!todo) return res.sendStatus(404);
+//
+//     todo.completed = !todo.completed;
+//
+//     res.json(todo);
+// });
+//
+// app.delete('/api/todos/:id', (req, res) => {
+//     let index = todos.findIndex(todo => todo.id == req.params.id);
+//
+//     if (index === -1) return res.sendStatus(404);
+//
+//     todos.splice(index, 1);
+//
+//     res.sendStatus(204);
+// });
 
 app.listen(5000, 'localhost');

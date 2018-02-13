@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import TableCell from './TableCell'
 import header from '../api/data/header'
@@ -15,6 +16,7 @@ class TableItem extends Component {
         this.addCell = this.addCell.bind(this);
         this.onChange = this.onChange.bind(this);
         this.calcSumm = this.calcSumm.bind(this);
+        this.tableUpdate = this.tableUpdate.bind(this);
 
         this.calcSumm();
     }
@@ -37,6 +39,7 @@ class TableItem extends Component {
 
         this.setState({ table });
         this.calcSumm();
+        this.tableUpdate();
     }
 
     calcSumm() {
@@ -53,6 +56,17 @@ class TableItem extends Component {
 
     addCell() {
         console.log('добавление ячейки')
+    }
+    
+    tableUpdate() {
+        let table = this.state.table;
+        
+        axios.post('/api/data/table', { table })
+            .then(response => {
+                response.data;
+                console.log(response)
+            })
+            .catch(error => console.error(error));
     }
 
     headerBlock() {
