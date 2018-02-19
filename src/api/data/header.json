@@ -1,26 +1,26 @@
 [
   {
     "id": 1,
-    "title": "Дата"
+    "title": "1"
   },
   {
     "id": 2,
-    "title": "Еда"
+    "title": "2"
   },
   {
     "id": 3,
-    "title": "Кафе"
+    "title": "3"
   },
   {
     "id": 4,
-    "title": "Телефон"
+    "title": "4"
   },
   {
     "id": 5,
-    "title": "Квартира"
+    "title": "5"
   },
   {
     "id": 99,
-    "title": "Итого"
+    "title": "sum"
   }
 ]

@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 
 const table = require('./data/table');
 
-// let nextId = 4;
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -20,9 +18,33 @@ app.get('/api/data/table', (req, res) => {
     res.send(table);
 });
 
-app.post('/api/todos', (req, res) => {
-    res.send(table);
+app.put('/api/data/table/:id', (req, res) => {
+    let item;
+
+    table.map(month => {
+        month.days.map(day => {
+            item = day.value.find(input => input.id === req.params.id);
+            if(item) {
+                done();
+            }
+        });
+    });
+    
+    function done(){
+        item.val = req.body.val || item.val;
+    
+        res.json(item);
+    }
 });
+
+// app.post('/api/data/table', (req, res) => {
+//     // console.log(req);
+//     // table = req.body.table;
+//     // console.log(table);
+//     res.send(table);
+// });
+
+
 
 // app.post('/api/todos', (req, res) => {
 //     let todo = {

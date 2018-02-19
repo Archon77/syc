@@ -8,7 +8,7 @@ function Header() {
                 <div className="container">
                     <div className="header__inner">
                         <div className="header__sum">
-                            12 125 524 P.
+                            12 125 524
                         </div>
                         <div className="header-nav">
                             <a href="javascript.void(0)" className="header-nav__item">

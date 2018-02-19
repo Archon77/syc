@@ -8,24 +8,29 @@ import Header from './components/Header';
 class App extends Component {
     constructor(props) {
         super(props);
-        
-        // console.log();
-    
-        // this.props.table.forEach(function (item) {
-        //     console.log(item);
-        // });
 
         this.state = {
             table: []
         };
+        
+        
+        // this.tableUpdate = this.tableUpdate.bind(this);
     }
     
     componentDidMount() {
         axios.get('http://localhost:3000/api/data/table')
             .then(response => response.data)
-            .then(table => this.setState({ table }))
+            .then(table => {
+                this.setState({ table }) ;
+                window.table = this.state.table;
+            })
             .catch(error => console.error(error.message));
     }
+    
+    // tableUpdate(table) {
+    //     axios.post('http://localhost:3000/api/data/table', { table })
+    //         .catch(error => console.error(error));
+    // }
     
     render() {
         return (
@@ -36,7 +41,8 @@ class App extends Component {
                     <div className="container">
                         <div className="table">
 
-                            <TableInner head={true} />
+                            <TableInner head={true}
+                                        table={this.state.table}/>
 
                             {this.state.table.map(month =>
                                 <TableInner month={month.title}

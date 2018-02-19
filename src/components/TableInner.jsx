@@ -10,7 +10,8 @@ class TableInner extends Component {
     headerBlock() {
         return (
             <div className="table__inner">
-                <TableItem head={true} />
+                <TableItem head={true}
+                           table={this.props.table}/>
             </div>
         )
     }

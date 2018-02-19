@@ -10,42 +10,41 @@ class TableItem extends Component {
 
         this.state = {
             table: this.props.table,
-            header: []
+            header: [],
+            value: this.props.value
         };
+        
+        window.test = this.state;
 
         this.addCell = this.addCell.bind(this);
         this.onChange = this.onChange.bind(this);
         this.calcSumm = this.calcSumm.bind(this);
-        this.tableUpdate = this.tableUpdate.bind(this);
 
-        this.calcSumm();
+        this.calcSumm(this.props.value);
     }
 
     onChange(id, val) {
-        let table = this.state.table.map(month => {
-            month.days.map(day => {
-                day.value.map(input => {
+        axios.put(`http://localhost:3000/api/data/table/${id}`, { val })
+            .then(response => {
+                let value = this.state.value.map(input => {
 
                     if(input.id === id) {
-                        input.val = val;
+                        input.val = parseInt(response.data.val, 10);
                     }
 
                     return input
                 });
-                return day
-            });
-            return month
-        });
-
-        this.setState({ table });
-        this.calcSumm();
-        this.tableUpdate();
+    
+                this.calcSumm(value);
+                this.setState({ value });
+            })
+            .catch(error => console.error(error));
     }
 
-    calcSumm() {
+    calcSumm(value) {
         this.sum = 0;
 
-        let values = this.props.value;
+        let values = value;
 
         if(values !== undefined) {
             values.map(value => {
@@ -56,17 +55,6 @@ class TableItem extends Component {
 
     addCell() {
         console.log('добавление ячейки')
-    }
-    
-    tableUpdate() {
-        let table = this.state.table;
-        
-        axios.post('/api/data/table', { table })
-            .then(response => {
-                response.data;
-                console.log(response)
-            })
-            .catch(error => console.error(error));
     }
 
     headerBlock() {
