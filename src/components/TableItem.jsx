@@ -13,14 +13,13 @@ class TableItem extends Component {
             header: [],
             value: this.props.value
         };
-        
-        window.test = this.state;
 
         this.addCell = this.addCell.bind(this);
         this.onChange = this.onChange.bind(this);
         this.calcSum = this.calcSum.bind(this);
         this.finalSum = this.finalSum.bind(this);
     }
+    
     componentDidMount() {
         this.calcSum(this.props.value);
     }
@@ -59,6 +58,11 @@ class TableItem extends Component {
     
     finalSum() {
         let sum = 0;
+    
+        axios.get('http://localhost:3000/api/data/table')
+            .then(response => response.data)
+            .then(table => this.setState({ table }))
+            .catch(error => console.error(error));
         
         this.state.table.map(month => {
             month.days.map(day => {
@@ -74,7 +78,7 @@ class TableItem extends Component {
     }
 
     addCell() {
-        console.log('добавление ячейки')
+        console.log('добавление столбца')
     }
 
     headerBlock() {

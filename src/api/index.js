@@ -40,29 +40,28 @@ app.put('/api/data/table/:id', (req, res) => {
     }
 });
 
-app.put('/api/data/table/:id', (req, res) => {
+app.put('/api/data/table/', (req, res) => {
     let item;
-    
+
     table.map(month => {
-        month.days.map(day => {
-            item = day.value.find(input => input.id === req.params.id);
-            if(item) {
-                done(item);
-            }
-        });
+        if(month.id === req.body.monthId) {
+            item = month;
+
+            done(item);
+        }
     });
-    
+    //
     function done(item){
-        item.val = parseInt(req.body.val, 10);
-        
+        item.profit = parseInt(req.body.val, 10);
+
         tableUpdate();
-        
-        res.json(item);
+
+        res.json(table);
     }
 });
 
 
-// Добавление
+// Добавление нового дня
 app.post('/api/data/table/', (req, res) => {
     const day = {
         id: `${req.body.monthId}-${req.body.i}`,

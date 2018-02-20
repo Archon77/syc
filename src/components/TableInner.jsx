@@ -9,10 +9,15 @@ class TableInner extends Component {
         super(props);
         
         this.state = {
-            days: this.props.days
+            table: this.props.table,
+            days: this.props.days,
+            profit: this.props.profit,
+            sum: 0
         };
         
         this.addDay = this.addDay.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.calcFinalSum = this.calcFinalSum.bind(this);
     }
     headerBlock() {
         return (
@@ -21,6 +26,35 @@ class TableInner extends Component {
                            table={this.props.table}/>
             </div>
         )
+    }
+    
+    onChange(val) {
+        const monthId = this.props.monthId;
+        
+        axios.put('http://localhost:3000/api/data/table/', { monthId, val })
+            .then(response => response.data)
+            .then(table => {
+                this.setState({ table,
+                                profit: val  });
+                this.calcFinalSum(this.state.sum);
+            })
+            .catch(error => console.error(error));
+    }
+    
+    calcFinalSum(val) {
+        // console.log(this.state.sum);
+        
+        let sum = 0;
+        
+        this.state.table.map(month => {
+            sum += month.profit;
+        });
+    
+        this.setState({ sum: val });
+        
+        val += sum;
+        
+        this.props.calcFinalSum(val);
     }
     addDay() {
         let days = this.state.days;
@@ -33,12 +67,12 @@ class TableInner extends Component {
                 item.id == `${monthId}-${i}` ?  b = true : "" ;
             });
             return b;
-        };
+        }
         
-        if(i <= 0) {
-            alert('Дата должна быть больше 0 =/');
+        if(i <= 0 || i > 31) {
+            alert('Дата должна быть больше 0 и меньше 31');
         } else if (!i) {
-            alert('Введите цифрой >_<');
+            alert('Введите цифру >_<');
         } else if (isDayInTable()) {
             alert('Введенная дата уже существует');
         } else {
@@ -55,6 +89,12 @@ class TableInner extends Component {
                     this.setState({ days });
                 })
                 .catch(error => console.error(error));
+    
+    
+            axios.get('http://localhost:3000/api/data/table')
+                .then(response => response.data)
+                .then(table => this.setState({ table }))
+                .catch(error => console.error(error));
         }
     }
     bodyBlock() {
@@ -62,7 +102,8 @@ class TableInner extends Component {
             <div className="table__inner">
                 <div className="table-item table-item--month">
                     <span>{this.props.month}</span>
-                    <TableCell content={true}>{this.props.profit}</TableCell>
+                    <TableCell content={true}
+                               onChange={(id, value) => this.onChange(value)}>{this.state.profit}</TableCell>
                     <i className="material-icons"
                        title="Добавить день"
                        onClick={this.addDay}>add</i>
@@ -70,8 +111,8 @@ class TableInner extends Component {
                 {this.state.days.map(day =>
                     <TableItem key={day.id}
                                title={day.title}
-                               table={this.props.table}
-                               calcFinalSum={(val) => this.props.calcFinalSum(val)}
+                               table={this.state.table}
+                               calcFinalSum={(val) => this.calcFinalSum(val)}
                                value={day.value}/>
                 )}
             </div>
