@@ -68,19 +68,13 @@
     border: 1px solid var(--blue);
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    position: relative;
     
     span {
       margin: 0 auto;
       padding-left: 160px;
       text-transform: uppercase;
       color: var(--blue);
-    }
-    i {
-      color: var(--blue5) !important;
-      
-      &:hover {
-        color: var(--blue) !important;
-      }
     }
     input,
     input:disabled {
@@ -93,6 +87,32 @@
       border-top-right-radius: 15px;
       border: none;
       background: transparent;
+      
+      &:last-of-type {
+        border-right: none;
+      }
+      
+      i {
+        color: var(--blue5) !important;
+    
+        &:hover {
+          color: var(--blue) !important;
+        }
+      }
+    }
+    
+    & > i {
+      position: absolute;
+      right: -30px;
+      top: 50%;
+      color: var(--blue);
+      transform: translateY(-50%);
+      transition: .2s;
+      cursor: pointer;
+  
+      &:hover {
+        color: var(--yellow) !important;
+      }
     }
   }
   

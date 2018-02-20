@@ -18,9 +18,11 @@ class TableItem extends Component {
 
         this.addCell = this.addCell.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.calcSumm = this.calcSumm.bind(this);
-
-        this.calcSumm(this.props.value);
+        this.calcSum = this.calcSum.bind(this);
+        this.finalSum = this.finalSum.bind(this);
+    }
+    componentDidMount() {
+        this.calcSum(this.props.value);
     }
 
     onChange(id, val) {
@@ -34,14 +36,14 @@ class TableItem extends Component {
 
                     return input
                 });
-    
-                this.calcSumm(value);
+
+                this.calcSum(value);
                 this.setState({ value });
             })
             .catch(error => console.error(error));
     }
 
-    calcSumm(value) {
+    calcSum(value) {
         this.sum = 0;
 
         let values = value;
@@ -50,6 +52,24 @@ class TableItem extends Component {
             values.map(value => {
                 this.sum += parseInt(value.val, 10);
             })
+        }
+        
+        this.finalSum();
+    }
+    
+    finalSum() {
+        let sum = 0;
+        
+        this.state.table.map(month => {
+            month.days.map(day => {
+                day.value.map(val => {
+                    sum -= val.val;
+                })
+            })
+        });
+    
+        if(this.props.calcFinalSum) {
+            this.props.calcFinalSum(sum);
         }
     }
 

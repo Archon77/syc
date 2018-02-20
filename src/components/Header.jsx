@@ -1,14 +1,14 @@
 // import React, { Component } from 'react';
 import React from 'react';
 
-function Header() {
+function Header(props) {
     return(
         <header>
             <div className="header">
                 <div className="container">
                     <div className="header__inner">
                         <div className="header__sum">
-                            12 125 524
+                            {props.finalSum} р.
                         </div>
                         <div className="header-nav">
                             <a href="javascript.void(0)" className="header-nav__item">

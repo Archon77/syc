@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -25,25 +26,85 @@ app.put('/api/data/table/:id', (req, res) => {
         month.days.map(day => {
             item = day.value.find(input => input.id === req.params.id);
             if(item) {
-                done();
+                done(item);
             }
         });
     });
     
-    function done(){
-        item.val = req.body.val || item.val;
+    function done(item){
+        item.val = parseInt(req.body.val, 10);
     
+        tableUpdate();
+
         res.json(item);
     }
 });
 
-// app.post('/api/data/table', (req, res) => {
-//     // console.log(req);
-//     // table = req.body.table;
-//     // console.log(table);
-//     res.send(table);
-// });
+app.put('/api/data/table/:id', (req, res) => {
+    let item;
+    
+    table.map(month => {
+        month.days.map(day => {
+            item = day.value.find(input => input.id === req.params.id);
+            if(item) {
+                done(item);
+            }
+        });
+    });
+    
+    function done(item){
+        item.val = parseInt(req.body.val, 10);
+        
+        tableUpdate();
+        
+        res.json(item);
+    }
+});
 
+
+// Добавление
+app.post('/api/data/table/', (req, res) => {
+    const day = {
+        id: `${req.body.monthId}-${req.body.i}`,
+        title: parseInt(req.body.i, 10),
+        value: [
+            {
+                id: `${req.body.monthId}-${req.body.i}-1`,
+                val: 0
+            },
+            {
+                id: `${req.body.monthId}-${req.body.i}-2`,
+                val: 0
+            },
+            {
+                id: `${req.body.monthId}-${req.body.i}-3`,
+                val: 0
+            },
+            {
+                id: `${req.body.monthId}-${req.body.i}-4`,
+                val: 0
+            }
+        ]
+    };
+
+    table.map(month => {
+        if(month.id == req.body.monthId) {
+            month.days.push(day);
+            month.days.sort((a,b) => {
+                if (a.title > b.title) return 1;
+                if (a.title < b.title) return -1;
+            });
+            tableUpdate();
+            res.send(day);
+        }
+    });
+});
+
+function tableUpdate() {
+    fs.writeFile(__dirname + '/data/table.json', JSON.stringify(table), error => {
+        if(error) console.log(error);
+    });
+}
 
 
 // app.post('/api/todos', (req, res) => {
