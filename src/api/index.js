@@ -63,7 +63,10 @@ app.put('/api/data/table/', (req, res) => {
 
 // Добавление нового дня
 app.post('/api/data/table/', (req, res) => {
-    const _day = {
+    //month - req id месяца
+    //day - req id дня
+    
+    const newDay = {
         id: `${req.body.month}-${req.body.day}`,
         title: parseInt(req.body.day, 10),
         value: [
@@ -86,21 +89,42 @@ app.post('/api/data/table/', (req, res) => {
         ]
     };
     
-    //Сортировка таблицы
-    table.map(_month => {
+    const newMonth = {
+        id: req.body.month,
+        title: req.body.monthTitle,
+        profit: 0,
+        days: [
+            newDay
+        ]
+    };
+    
+    table.map((_month, i, array) => {
+    
+        //Если в таблице есть месяц с id из req
         if(_month.id == req.body.month) {
-            _month.days.push(_day);
+            _month.days.push(newDay);
+    
+            //Сортировка таблицы
             _month.days.sort((a,b) => {
                 if (a.title < b.title) return 1;
                 if (a.title > b.title) return -1;
             });
-            
-            tableUpdate();
-            
-            res.send(table);
-            // res.send(_day);
+        }
+        //Если в таблице такого месяца не нашлось - создать месяц с выбранным(req) днём
+        else if(i === array.length - 1) {
+            table.push(newMonth);
+    
+            //Сортировка таблицы
+            table.sort((a,b) => {
+                if (a.id < b.id) return 1;
+                if (a.id > b.id) return -1;
+            });
         }
     });
+    
+    tableUpdate();
+    
+    res.send(table);
 });
 
 function tableUpdate() {
@@ -110,48 +134,5 @@ function tableUpdate() {
         if(error) console.log(error);
     });
 }
-
-
-// app.post('/api/todos', (req, res) => {
-//     let todo = {
-//         id: nextId++,
-//         title: req.body.title,
-//         completed: false
-//     };
-//
-//     todos.push(todo);
-//
-//     res.send(todo);
-// });
-//
-// app.put('/api/todos/:id', (req, res) => {
-//     let todo = todos.find(todo => todo.id == req.params.id);
-//
-//     if (!todo) return res.sendStatus(404);
-//
-//     todo.title = req.body.title || todo.title;
-//
-//     res.json(todo);
-// });
-//
-// app.patch('/api/todos/:id', (req, res) => {
-//     let todo = todos.find(todo => todo.id == req.params.id);
-//
-//     if (!todo) return res.sendStatus(404);
-//
-//     todo.completed = !todo.completed;
-//
-//     res.json(todo);
-// });
-//
-// app.delete('/api/todos/:id', (req, res) => {
-//     let index = todos.findIndex(todo => todo.id == req.params.id);
-//
-//     if (index === -1) return res.sendStatus(404);
-//
-//     todos.splice(index, 1);
-//
-//     res.sendStatus(204);
-// });
 
 app.listen(5000,() => console.log('Сервер создан'));

@@ -34,7 +34,25 @@ class App extends Component {
     
     //Добавление нового дня
     addDay(day, month) {
-        axios.post(`http://localhost:3000/api/data/table/`, { day, month })
+    
+        //Пул месяцев для определения monthTitle и передачи на создание нового месяца
+        const monthList = [
+            'Январь',
+            'Февраль',
+            'Март',
+            'Апрель',
+            'Май',
+            'Июнь',
+            'Июль',
+            'Август',
+            'Сентябрь',
+            'Октябрь',
+            'Ноябрь',
+            'Декабрь'
+        ];
+        let monthTitle = monthList[month - 1];
+        
+        axios.post(`http://localhost:3000/api/data/table/`, { day, month, monthTitle })
             .then(response => response.data)
             .then(table => this.setState({table}))
             .catch(error => console.error(error));
