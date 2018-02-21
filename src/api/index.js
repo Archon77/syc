@@ -31,44 +31,33 @@ app.put('/api/data/table/:id', (req, res) => {
             
             //Если таковой существует
             if(item) {
-                done(item);
+                //Заменить его значение на значение из запроса
+                item.val = parseInt(req.body.val, 10);
+    
+                tableUpdate();
+    
+                //Отправляем измененную "ячейку"
+                res.json(item);
             }
         });
     });
-    
-    function done(item){
-        //Заменить его значение на значение из запроса
-        item.val = parseInt(req.body.val, 10);
-    
-        tableUpdate();
-        
-        //Отправляем измененную "ячейку"
-        res.json(item);
-    }
 });
 
 //Изменение профита
 app.put('/api/data/table/', (req, res) => {
-    let item;
-
     table.map(month => {
         //Если id месяца соответствует id запроса
         if(month.id === req.body.monthId) {
-            item = month;
-
-            done(item);
+    
+            //Заменить его значение профита на значение из запроса
+            month.profit = parseInt(req.body.val, 10);
+    
+            tableUpdate();
+    
+            //Да, а обратно возвращаем таблицу, новое значение изменится в компоненте
+            res.json(table);
         }
     });
-    
-    function done(item){
-        //Заменить его значение профита на значение из запроса
-        item.profit = parseInt(req.body.val, 10);
-
-        tableUpdate();
-        
-        //Да, а обратно возвращаем таблицу, новое значение изменится в компоненте
-        res.json(table);
-    }
 });
 
 
@@ -96,7 +85,8 @@ app.post('/api/data/table/', (req, res) => {
             }
         ]
     };
-
+    
+    //Сортировка таблицы
     table.map(month => {
         if(month.id == req.body.monthId) {
             month.days.push(day);
@@ -104,7 +94,9 @@ app.post('/api/data/table/', (req, res) => {
                 if (a.title < b.title) return 1;
                 if (a.title > b.title) return -1;
             });
+            
             tableUpdate();
+            
             res.send(day);
         }
     });
