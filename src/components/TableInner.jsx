@@ -9,12 +9,10 @@ class TableInner extends Component {
         super(props);
         
         //table - вся таблица целиком
-        //days - дни этого месяца
         //profit - сабж
         //sum - сумма текущих расходов, обновляется при изменениях расходов, используется для пересчета FinalSum при изменении профита
         this.state = {
             table: this.props.table,
-            days: this.props.days,
             profit: this.props.profit,
             sum: 0
         };
@@ -62,7 +60,7 @@ class TableInner extends Component {
                     <TableCell content={true}
                                onChange={(id, value) => this.onChange(value)}>{this.state.profit}</TableCell>
                 </div>
-                {this.state.days.map(day =>
+                {this.props.days.map(day =>
                     <TableItem key={day.id}
                                title={day.title}
                                table={this.state.table}

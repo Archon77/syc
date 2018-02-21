@@ -37,18 +37,6 @@ class App extends Component {
         axios.post(`http://localhost:3000/api/data/table/`, { day, month })
             .then(response => response.data)
             .then(table => this.setState({table}))
-            // .then(day => {
-                // //Добавление дня в массив
-                // const days = [...this.state.days, day];
-                //
-                // //Сортировка на убывание
-                // days.sort((a,b) => {
-                //     if (a.title < b.title) return 1;
-                //     if (a.title > b.title) return -1;
-                // });
-    
-                // this.setState({ days });
-            // })
             .catch(error => console.error(error));
     }
     

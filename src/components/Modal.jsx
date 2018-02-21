@@ -44,9 +44,7 @@ class Modal extends Component {
             this.closeModal();
             
             this.setState({ error: undefined });
-            
-            console.log('send', day, month);
-            
+                        
             // Сохраняем выбранный день в App
             this.props.onDaySelect(day, month);
         }
