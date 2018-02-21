@@ -14,6 +14,8 @@ class Modal extends Component {
         
         this.closeModal = this.closeModal.bind(this);
         this.handleDayClick = this.handleDayClick.bind(this);
+        this.dayModal = this.dayModal.bind(this);
+        this.columnModal = this.columnModal.bind(this);
     }
     
     //Сохранение выбранного дня, закрытие модалки
@@ -23,6 +25,7 @@ class Modal extends Component {
         let data = selectedDay.split('.');
         let day = parseInt(data[0], 10);
         let month = parseInt(data[1], 10);
+        let year = parseInt(data[2], 10);
     
         // Этот день уже существует?
         // Ну просто должен быть нормальный return а не эта дичь. Переделать
@@ -38,8 +41,11 @@ class Modal extends Component {
             return b;
         };
         
+        //Валидация
         if(isDayExist()) {
             this.setState({ error: 'Выбраная дата уже существует' })
+        } else if(year != 2018) {
+            this.setState({ error: 'Пока работает только для 2018. Для остальных годов, скорее всего, будет архив' })
         } else {
             this.closeModal();
             
@@ -60,31 +66,54 @@ class Modal extends Component {
         }, 200)
     }
     
+    dayModal() {
+        return(
+            <div className="modal__content">
+                <div className="modal__header">
+                    <div className="modal__title">
+                        Выберите дату
+                    </div>
+                    <i className="modal__cross material-icons" onClick={this.closeModal}>clear</i>
+                </div>
+                <div className="modal__day-picker">
+                    <DayPicker onDayClick={this.handleDayClick} />
+                </div>
+                {this.state.error ?
+                    <div className="modal__error">
+                        {this.state.error}
+                    </div>
+                    :
+                    ''
+                }
+            </div>
+        )
+    }
     
+    columnModal() {
+        return(
+            <div className="modal__content">
+                <div className="modal__header">
+                    <div className="modal__title">
+                        Введите заголовок новой строки расходов
+                    </div>
+                    <i className="modal__cross material-icons" onClick={this.closeModal}>clear</i>
+                </div>
+                <form action="">
+                    <input className="modal__input" type="text"/>
+                    <button className="modal__btn">
+                        <i className="material-icons">done</i>
+                    </button>
+                </form>
+            </div>
+        )
+    }
     
     render() {
         return (
             <div>
-                {this.props.showDayModal ?
+                {this.props.showModal ?
                     <div className={`modal ${this.state.fadeOut ? 'modal--fade-out' : 'modal--fade-in'}`}>
-                        <div className="modal__content">
-                            <div className="modal__header">
-                                <div className="modal__title">
-                                    Выберите дату
-                                </div>
-                                <i className="modal__cross material-icons" onClick={this.closeModal}>clear</i>
-                            </div>
-                            <div className="modal__day-picker">
-                                <DayPicker onDayClick={this.handleDayClick} />
-                            </div>
-                            {this.state.error ?
-                                <div className="modal__error">
-                                    {this.state.error}
-                                </div>
-                                :
-                                ''
-                            }
-                        </div>
+                        {this.props.showDayModal ? this.dayModal() : this.columnModal()}
                         <div className="modal__mask" onClick={this.closeModal}></div>
                     </div>
                     :

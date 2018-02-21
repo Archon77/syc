@@ -5,6 +5,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const table = require('./data/table');
+const header = require('./data/header');
+
+let headerId = 4;
 
 const app = express();
 
@@ -15,6 +18,7 @@ app.use((req, res, next) => {
     next();
 });
 
+// Таблица
 app.get('/api/data/table', (req, res) => {
     res.send(table);
 });
@@ -59,7 +63,6 @@ app.put('/api/data/table/', (req, res) => {
         }
     });
 });
-
 
 // Добавление нового дня
 app.post('/api/data/table/', (req, res) => {
@@ -134,5 +137,31 @@ function tableUpdate() {
         if(error) console.log(error);
     });
 }
+
+
+// Header
+app.get('/api/data/header', (req, res) => {
+    res.send(header);
+});
+
+// Добавление нового столбца
+// app.post('/api/data/header/', (req, res) => {
+//     const newColumn = {
+//         id: headerId + 1,
+//         title: req.body.title
+//     };
+//
+//     header.push(newColumn);
+//
+//     header.sort((a,b) => {
+//         if (a.title < b.title) return 1;
+//         if (a.title > b.title) return -1;
+//     });
+//
+//     tableUpdate();
+//
+//     res.send(header);
+// });
+
 
 app.listen(5000,() => console.log('Сервер создан'));

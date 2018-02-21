@@ -13,16 +13,27 @@ class App extends Component {
 
         //load - обновляется ли итоговая сумма, отображение лоадера
         //dayAdd - последний добавленный день
+        //showModal - отображение модалки
+        //showDayModal, showNewColumnModal - влияют на контент модалки
         this.state = {
             table: [],
+            header: [],
             finalSum: 0,
+            showModal: false,
             showDayModal: false,
+            showNewColumnModal: false,
             dayAdd: undefined,
             load: false
         };
         
         this.onDaySelect = this.onDaySelect.bind(this);
         this.addDay = this.addDay.bind(this);
+        this.addColumn = this.addColumn.bind(this);
+    }
+    
+    addColumn() {
+        this.setState({ showModal: true,
+                        showNewColumnModal: true });
     }
     
     onDaySelect(day, month) {
@@ -64,6 +75,13 @@ class App extends Component {
             .then(response => response.data)
             .then(table => this.setState({ table }))
             .catch(error => console.error(error.message));
+    
+    
+        //Первичная загрузка хедера
+        axios.get('http://localhost:3000/api/data/header')
+            .then(response => response.data)
+            .then(header => this.setState({ header }))
+            .catch(error => console.error(error.message));
     }
     
     
@@ -71,14 +89,18 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                {/*Хедер сайта*/}
                 <Header finalSum={this.state.finalSum}
                         load={this.state.load} />
 
                 <main>
                     <div className="container">
                         <div className="table">
-                            
-                            <TableHeader addNewDay={() => this.setState({ showDayModal: true })} />
+    
+                            {/*Хедер таблицы*/}
+                            <TableHeader addNewDay={() => this.setState({ showModal: true, showDayModal: true })}
+                                         addNewColumn={() => this.addColumn()}
+                                         header={this.state.header} />
                             
                             {this.state.table.map(month =>
                                 <TableInner month={month.title}
@@ -94,8 +116,10 @@ class App extends Component {
                     </div>
                     
                     <Modal showDayModal={this.state.showDayModal}
+                           showNewColumnModal={this.state.showNewColumnModal}
+                           showModal={this.state.showModal}
                            table={this.state.table}
-                           onClose={() => this.setState({ showDayModal: false })}
+                           onClose={() => this.setState({ showModal: false, showNewColumnModal: false, showDayModal: false})}
                            onDaySelect={(day, month) => this.onDaySelect(day, month)} />
                 </main>
             </div>
