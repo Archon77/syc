@@ -1,6 +1,9 @@
 // import React, { Component } from 'react';
 import React from 'react';
 
+import loader from '../icons/loader.svg';
+
+
 function Header(props) {
     return(
         <header>
@@ -8,7 +11,7 @@ function Header(props) {
                 <div className="container">
                     <div className="header__inner">
                         <div className="header__sum">
-                            {props.finalSum} р.
+                            {props.load ? <img src={loader} /> : `${props.finalSum} р.`}
                         </div>
                         <div className="header-nav">
                             <a href="javascript.void(0)" className="header-nav__item">

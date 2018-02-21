@@ -21,7 +21,11 @@ class TableItem extends Component {
     }
     
     componentDidMount() {
-        this.calcSum(this.props.value);
+        //Отвечает за необходимость обновления таблицы, т.к. при инициализации на каждой итерации таблица не изменяется - её не подргужаем
+        //Иначе "this.onChange" в 3м параметре передается false
+        let init = true;
+        
+        this.calcSum(this.props.value, init);
     }
 
     onChange(id, val) {
@@ -42,7 +46,12 @@ class TableItem extends Component {
             .catch(error => console.error(error));
     }
 
-    calcSum(value) {
+    calcSum(value, init) {
+        if(this.props.calcStart) {
+            console.log('calcStart');
+            this.props.calcStart(true);
+        }
+        
         this.sum = 0;
 
         let values = value;
@@ -53,34 +62,45 @@ class TableItem extends Component {
             })
         }
         
-        this.finalSum();
+        this.finalSum(init);
     }
     
-    finalSum() {
+    finalSum(init) {
         let sum = 0;
     
-        axios.get('http://localhost:3000/api/data/table')
-            .then(response => response.data)
-            .then(table => this.setState({ table }))
-            .catch(error => console.error(error));
-        
-        this.state.table.map(month => {
-            month.days.map(day => {
-                day.value.map(val => {
-                    sum -= val.val;
+        let calculation = () => {
+            this.state.table.map(month => {
+                month.days.map(day => {
+                    day.value.map(val => {
+                        sum -= val.val;
+                    })
                 })
-            })
-        });
-    
-        if(this.props.calcFinalSum) {
-            this.props.calcFinalSum(sum);
+            });
+            if(this.props.calcFinalSum) {
+                this.props.calcFinalSum(sum);
+            }
+        };
+        
+        if(init) {
+            calculation();
+        } else {
+            //Обновление таблицы на случай добавления нового дня
+            axios.get('http://localhost:3000/api/data/table')
+                .then(response => response.data)
+                .then(table => {
+                    this.setState({ table });
+                    calculation();
+                })
+                .catch(error => console.error(error));
         }
     }
 
     addCell() {
         console.log('добавление столбца')
     }
-
+    
+    
+    //render
     headerBlock() {
         return (
             <div className={'table-item table-item--head'}>
@@ -97,7 +117,6 @@ class TableItem extends Component {
             </div>
         )
     }
-
     bodyBlock() {
         return (
             <div className={'table-item'}>
@@ -106,7 +125,7 @@ class TableItem extends Component {
                     {this.props.value.map(cell =>
                         <TableCell key={cell.id}
                                    id={cell.id}
-                                   onChange={(id, value) =>  this.onChange(id, value)}
+                                   onChange={(id, value) =>  this.onChange(id, value, false)}
                                    val={cell.val}
                                    content={true} />
                     )}
@@ -115,7 +134,6 @@ class TableItem extends Component {
             </div>
         )
     }
-
     render() {
         return(
             this.props.head ? this.headerBlock() : this.bodyBlock()

@@ -9,29 +9,29 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        //load - обновляется ли итоговая сумма, отображение лоадера
         this.state = {
             table: [],
-            finalSum: 0
+            finalSum: 0,
+            load: false
         };
-    
-        this.calcFinalSum = this.calcFinalSum.bind(this);
-    }
-    
-    calcFinalSum(finalSum) {
-        this.setState({ finalSum })
     }
     
     componentDidMount() {
+        //Первичная загрузка таблицы
         axios.get('http://localhost:3000/api/data/table')
             .then(response => response.data)
             .then(table => this.setState({ table }))
             .catch(error => console.error(error.message));
     }
     
+    
+    
     render() {
         return (
             <div className="App">
-                <Header finalSum={this.state.finalSum} />
+                <Header finalSum={this.state.finalSum}
+                        load={this.state.load} />
 
                 <main>
                     <div className="container">
@@ -46,7 +46,8 @@ class App extends Component {
                                             key={month.id}
                                             table={this.state.table}
                                             profit={month.profit}
-                                            calcFinalSum={(val) => this.calcFinalSum(val)}
+                                            calcStart={(load) => this.setState({ load })}
+                                            calcFinalSum={(finalSum) => this.setState({ finalSum, load: false })}
                                             days={month.days} />
                             )}
                         </div>

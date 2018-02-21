@@ -19,12 +19,17 @@ app.get('/api/data/table', (req, res) => {
     res.send(table);
 });
 
+//onChange всех value ячеек
 app.put('/api/data/table/:id', (req, res) => {
     let item;
 
     table.map(month => {
         month.days.map(day => {
+            
+            //Найденный value с id соответствующим id запроса..
             item = day.value.find(input => input.id === req.params.id);
+            
+            //Если таковой существует
             if(item) {
                 done(item);
             }
@@ -32,30 +37,36 @@ app.put('/api/data/table/:id', (req, res) => {
     });
     
     function done(item){
+        //Заменить его значение на значение из запроса
         item.val = parseInt(req.body.val, 10);
     
         tableUpdate();
-
+        
+        //Отправляем измененную "ячейку"
         res.json(item);
     }
 });
 
+//Изменение профита
 app.put('/api/data/table/', (req, res) => {
     let item;
 
     table.map(month => {
+        //Если id месяца соответствует id запроса
         if(month.id === req.body.monthId) {
             item = month;
 
             done(item);
         }
     });
-    //
+    
     function done(item){
+        //Заменить его значение профита на значение из запроса
         item.profit = parseInt(req.body.val, 10);
 
         tableUpdate();
-
+        
+        //Да, а обратно возвращаем таблицу, новое значение изменится в компоненте
         res.json(table);
     }
 });
@@ -90,8 +101,8 @@ app.post('/api/data/table/', (req, res) => {
         if(month.id == req.body.monthId) {
             month.days.push(day);
             month.days.sort((a,b) => {
-                if (a.title > b.title) return 1;
-                if (a.title < b.title) return -1;
+                if (a.title < b.title) return 1;
+                if (a.title > b.title) return -1;
             });
             tableUpdate();
             res.send(day);
@@ -100,6 +111,8 @@ app.post('/api/data/table/', (req, res) => {
 });
 
 function tableUpdate() {
+    
+    //Запись текущей const table в json
     fs.writeFile(__dirname + '/data/table.json', JSON.stringify(table), error => {
         if(error) console.log(error);
     });
