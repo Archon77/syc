@@ -28,11 +28,19 @@ class TableItem extends Component {
         this.calcSum(this.props.value, init);
     }
 
+    //onChange ячеек расходов
     onChange(id, val) {
+        //Т.к. произошли изменения значений - выставляем лоадер на finalSum
+        if(this.props.calcStart) {
+            this.props.calcStart(true);
+        }
+        
+        //Отправляем id измененной ячейки и новое значение
         axios.put(`http://localhost:3000/api/data/table/${id}`, { val })
             .then(response => {
                 let value = this.state.value.map(input => {
-
+                    
+                    //Обновление значения ячейки на значение из res
                     if(input.id === id) {
                         input.val = parseInt(response.data.val, 10);
                     }
@@ -46,16 +54,10 @@ class TableItem extends Component {
             .catch(error => console.error(error));
     }
 
-    calcSum(value, init) {
-        if(this.props.calcStart) {
-            console.log('calcStart');
-            this.props.calcStart(true);
-        }
-        
+    //Сумма расходов дня
+    calcSum(values, init) {
         this.sum = 0;
-
-        let values = value;
-
+        
         if(values !== undefined) {
             values.map(value => {
                 this.sum += parseInt(value.val, 10);
@@ -65,6 +67,7 @@ class TableItem extends Component {
         this.finalSum(init);
     }
     
+    //Пересчет итоговой суммы
     finalSum(init) {
         let sum = 0;
     
@@ -81,6 +84,7 @@ class TableItem extends Component {
             }
         };
         
+        //Коммент выше в componentDidMount
         if(init) {
             calculation();
         } else {
@@ -98,6 +102,7 @@ class TableItem extends Component {
     addCell() {
         console.log('добавление столбца')
     }
+    
     
     
     //render

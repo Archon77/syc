@@ -4,6 +4,7 @@ class TableCell extends Component {
     constructor(props) {
         super(props);
 
+        //isAdded - если значение добавляется, а не редактируется
         this.state = {
             value: this.props.val,
             oldValue: 0,
@@ -24,23 +25,23 @@ class TableCell extends Component {
         this.setState({ value });
     }
 
-
+    //Добавление затрат
     addValue() {
-        this.setState({
-            value: this.state.value,
-            disabled: false,
-            isAdded: true
-        });
-
+    
+        //Записываем текущее значение в oldValue, после чего обнуляем
         this.setState({
             oldValue: this.state.value,
-            value: 0
+            value: 0,
+            disabled: false,
+            isAdded: true
         });
 
         setTimeout(()=> {
             this.valueInput.focus();
         }, 1);
     }
+    
+    //Редактирование затрат
     editValue() {
         this.setState({
             disabled: false
@@ -50,28 +51,36 @@ class TableCell extends Component {
             this.valueInput.focus();
         }, 1);
     }
+    
     endEdit() {
-        let summValue = 0;
 
         if(this.state.isAdded) {
-            summValue = parseInt(this.state.value, 10) + parseInt(this.state.oldValue, 10);
-
+            
+            //Суммируем введеное и старое значения
+            let sumValue = parseInt(this.state.value, 10) + parseInt(this.state.oldValue, 10);
+    
+            //Все значения выставляем по последней сумме, отключаем "суммирование"
             this.setState({
-                oldValue: summValue,
-                value: summValue,
+                oldValue: sumValue,
+                value: sumValue,
                 isAdded: false
             });
-
-            this.props.onChange(this.valueInput.id, summValue);
+            
+            //Отправляем id измененной ячейки и последнюю сумму
+            this.props.onChange(this.valueInput.id, sumValue);
         } else {
+            
+            //Отправляем id измененной ячейки и отредактированное значение
             this.props.onChange(this.valueInput.id, this.state.value);
         }
-
+    
+        //Отключаем редактирование
         this.setState({
             disabled: true
         });
     }
-
+    
+    //Закончить ввод по Enter'у
     handleKeyPressed(e) {
         if(e.key === 'Enter') {
             this.endEdit();
@@ -95,7 +104,6 @@ class TableCell extends Component {
                                ref={(input) => {this.valueInput = input}}
                                onBlur={this.endEdit}
                                onKeyPress={this.handleKeyPressed}
-                               // onChange={this.handleChange}
                         />
                         <i className="material-icons"
                            title="Отредактировать $"
