@@ -8,7 +8,8 @@ class Modal extends Component {
         
         //fadeOut - анимация скрытия модалки
         this.state = {
-            fadeOut: false
+            fadeOut: false,
+            error: undefined
         };
         
         this.closeModal = this.closeModal.bind(this);
@@ -16,12 +17,39 @@ class Modal extends Component {
     }
     
     //Сохранение выбранного дня, закрытие модалки
-    handleDayClick(day) {
+    handleDayClick(selectedDay) {
+        selectedDay = selectedDay.toLocaleDateString();
+    
+        let data = selectedDay.split('.');
+        let day = parseInt(data[0], 10);
+        let month = parseInt(data[1], 10);
+    
+        // Этот день уже существует?
+        // Ну просто должен быть нормальный return а не эта дичь. Переделать
+        let isDayExist = () => {
+            let b = false;
+            
+            this.props.table.map(_month => {
+                _month.days.map(_day => {
+                    _day.id === `${month}-${day}` ?  b = true : "" ;
+                })
+            });
+            
+            return b;
+        };
         
-        //Сохраняем выбранный день в App
-        this.props.onDaySelect(day.toLocaleDateString());
-        
-        this.closeModal();
+        if(isDayExist()) {
+            this.setState({ error: 'Выбраная дата уже существует' })
+        } else {
+            this.closeModal();
+            
+            this.setState({ error: undefined });
+            
+            console.log('send', day, month);
+            
+            // Сохраняем выбранный день в App
+            this.props.onDaySelect(day, month);
+        }
     }
     
     //"Плавное" закрытие модалки
@@ -51,6 +79,13 @@ class Modal extends Component {
                             <div className="modal__day-picker">
                                 <DayPicker onDayClick={this.handleDayClick} />
                             </div>
+                            {this.state.error ?
+                                <div className="modal__error">
+                                    {this.state.error}
+                                </div>
+                                :
+                                ''
+                            }
                         </div>
                         <div className="modal__mask" onClick={this.closeModal}></div>
                     </div>

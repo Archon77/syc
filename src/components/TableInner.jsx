@@ -54,25 +54,13 @@ class TableInner extends Component {
     
     
     
-    //render
-    headerBlock() {
-        return (
-            <div className="table__inner">
-                <TableItem head={true}
-                           table={this.props.table}/>
-            </div>
-        )
-    }
-    bodyBlock() {
-        return (
+    render() {
+        return(
             <div className="table__inner">
                 <div className="table-item table-item--month">
                     <span>{this.props.month}</span>
                     <TableCell content={true}
                                onChange={(id, value) => this.onChange(value)}>{this.state.profit}</TableCell>
-                    <i className="material-icons"
-                       title="Добавить день"
-                       onClick={() => this.props.addNewDay()}>add</i>
                 </div>
                 {this.state.days.map(day =>
                     <TableItem key={day.id}
@@ -83,11 +71,6 @@ class TableInner extends Component {
                                value={day.value}/>
                 )}
             </div>
-        )
-    }
-    render() {
-        return(
-            this.props.head ? this.headerBlock() : this.bodyBlock()
         )
     }
 }

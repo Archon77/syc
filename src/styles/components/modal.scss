@@ -59,6 +59,11 @@
     }
   }
   
+  &__error {
+    text-align: center;
+    color: var(--red);
+  }
+  
   &__day-picker {
     text-align: center;
   }

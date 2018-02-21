@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import TableCell from './TableCell'
-import header from '../api/data/header'
 
 class TableItem extends Component {
     constructor(props) {
@@ -10,18 +9,16 @@ class TableItem extends Component {
 
         this.state = {
             table: this.props.table,
-            header: [],
             value: this.props.value
         };
 
-        this.addCell = this.addCell.bind(this);
         this.onChange = this.onChange.bind(this);
         this.calcSum = this.calcSum.bind(this);
         this.finalSum = this.finalSum.bind(this);
     }
     
     componentDidMount() {
-        //Отвечает за необходимость обновления таблицы, т.к. при инициализации на каждой итерации таблица не изменяется - её не подргужаем
+        //Отвечает за то будет обновлена страница или нет, т.к. при инициализации на каждой итерации таблица не изменяется - её не подргужаем
         //Иначе "this.onChange" в 3м параметре передается false
         let init = true;
         
@@ -98,32 +95,11 @@ class TableItem extends Component {
                 .catch(error => console.error(error));
         }
     }
-
-    addCell() {
-        console.log('добавление столбца')
-    }
     
     
     
-    //render
-    headerBlock() {
-        return (
-            <div className={'table-item table-item--head'}>
-                <div className="table-item__inner">
-                    {header.map(headerItem =>
-                        <TableCell key={headerItem.id}>
-                            {headerItem.title}
-                        </TableCell>
-                    )}
-                    <i className="material-icons"
-                       title="Добавить строку расходов"
-                       onClick={this.addCell}>add</i>
-                </div>
-            </div>
-        )
-    }
-    bodyBlock() {
-        return (
+    render() {
+        return(
             <div className={'table-item'}>
                 <div className="table-item__inner">
                     <TableCell>{this.props.title}</TableCell>
@@ -137,11 +113,6 @@ class TableItem extends Component {
                     <TableCell sum={true}>{this.sum}</TableCell>
                 </div>
             </div>
-        )
-    }
-    render() {
-        return(
-            this.props.head ? this.headerBlock() : this.bodyBlock()
         );
     }
 }

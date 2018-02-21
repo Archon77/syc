@@ -63,41 +63,42 @@ app.put('/api/data/table/', (req, res) => {
 
 // Добавление нового дня
 app.post('/api/data/table/', (req, res) => {
-    const day = {
-        id: `${req.body.monthId}-${req.body.i}`,
-        title: parseInt(req.body.i, 10),
+    const _day = {
+        id: `${req.body.month}-${req.body.day}`,
+        title: parseInt(req.body.day, 10),
         value: [
             {
-                id: `${req.body.monthId}-${req.body.i}-1`,
+                id: `${req.body.month}-${req.body.day}-1`,
                 val: 0
             },
             {
-                id: `${req.body.monthId}-${req.body.i}-2`,
+                id: `${req.body.month}-${req.body.day}-2`,
                 val: 0
             },
             {
-                id: `${req.body.monthId}-${req.body.i}-3`,
+                id: `${req.body.month}-${req.body.day}-3`,
                 val: 0
             },
             {
-                id: `${req.body.monthId}-${req.body.i}-4`,
+                id: `${req.body.month}-${req.body.day}-4`,
                 val: 0
             }
         ]
     };
     
     //Сортировка таблицы
-    table.map(month => {
-        if(month.id == req.body.monthId) {
-            month.days.push(day);
-            month.days.sort((a,b) => {
+    table.map(_month => {
+        if(_month.id == req.body.month) {
+            _month.days.push(_day);
+            _month.days.sort((a,b) => {
                 if (a.title < b.title) return 1;
                 if (a.title > b.title) return -1;
             });
             
             tableUpdate();
             
-            res.send(day);
+            res.send(table);
+            // res.send(_day);
         }
     });
 });
