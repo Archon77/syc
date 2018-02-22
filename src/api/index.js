@@ -69,27 +69,24 @@ app.post('/api/data/table/', (req, res) => {
     //month - req id месяца
     //day - req id дня
     
+    //Количество value ячеек за вычетом даты и итога
+    let valueLength = header.length - 2;
+    //Создание массива value ячеек
+    let values = [];
+    
+    for(let i = 0; i < valueLength; i++) {
+        let newValue = {
+            id: `${req.body.month}-${req.body.day}-${i + 1}`,
+            val: 0
+        };
+    
+        values.push(newValue);
+    }
+    
     const newDay = {
         id: `${req.body.month}-${req.body.day}`,
         title: parseInt(req.body.day, 10),
-        value: [
-            {
-                id: `${req.body.month}-${req.body.day}-1`,
-                val: 0
-            },
-            {
-                id: `${req.body.month}-${req.body.day}-2`,
-                val: 0
-            },
-            {
-                id: `${req.body.month}-${req.body.day}-3`,
-                val: 0
-            },
-            {
-                id: `${req.body.month}-${req.body.day}-4`,
-                val: 0
-            }
-        ]
+        value: values
     };
     
     const newMonth = {
@@ -100,6 +97,8 @@ app.post('/api/data/table/', (req, res) => {
             newDay
         ]
     };
+    
+    let b = false;
     
     table.map((_month, i, array) => {
     
@@ -112,9 +111,11 @@ app.post('/api/data/table/', (req, res) => {
                 if (a.title < b.title) return 1;
                 if (a.title > b.title) return -1;
             });
+    
+            b = true;
         }
         //Если в таблице такого месяца не нашлось - создать месяц с выбранным(req) днём
-        else if(i === array.length - 1) {
+        else if(i === array.length - 1 && !b) {
             table.push(newMonth);
     
             //Сортировка таблицы
@@ -125,14 +126,13 @@ app.post('/api/data/table/', (req, res) => {
         }
     });
     
-    tableUpdate();
+    // tableUpdate();
     
     res.send(table);
 });
 
+//Запись текущей table в json
 function tableUpdate() {
-    
-    //Запись текущей const table в json
     fs.writeFile(__dirname + '/data/table.json', JSON.stringify(table), error => {
         if(error) console.log(error);
     });
@@ -145,23 +145,44 @@ app.get('/api/data/header', (req, res) => {
 });
 
 // Добавление нового столбца
-// app.post('/api/data/header/', (req, res) => {
-//     const newColumn = {
-//         id: headerId + 1,
-//         title: req.body.title
-//     };
-//
-//     header.push(newColumn);
-//
-//     header.sort((a,b) => {
-//         if (a.title < b.title) return 1;
-//         if (a.title > b.title) return -1;
-//     });
-//
-//     tableUpdate();
-//
-//     res.send(header);
-// });
+app.post('/api/data/header/', (req, res) => {
+    const headerId = header[header.length - 2].id + 1;
+    
+    const newColumn = {
+        id: headerId,
+        title: req.body.title
+    };
 
+    header.push(newColumn);
+
+    header.sort((a,b) => {
+        if (a.id > b.id) return 1;
+        if (a.id < b.id) return -1;
+    });
+    
+    table.map(month =>{
+        month.days.map(day => {
+            
+            const newValue = {
+                "id": `${day.id}-${headerId}`,
+                "val": 0
+            };
+    
+            day.value.push(newValue);
+        })
+    });
+
+    tableUpdate();
+    headerUpdate();
+
+    res.send(header);
+});
+
+//Запись текущего header в json
+function headerUpdate() {
+    fs.writeFile(__dirname + '/data/header.json', JSON.stringify(header), error => {
+        if(error) console.log(error);
+    });
+}
 
 app.listen(5000,() => console.log('Сервер создан'));

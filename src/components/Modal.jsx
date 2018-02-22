@@ -6,9 +6,11 @@ class Modal extends Component {
     constructor(props) {
         super(props);
         
-        //fadeOut - анимация скрытия модалки
+        //fadeOut - анимация модалки
+        //showFormBtn - скрываем btn при пустом инпуте
         this.state = {
             fadeOut: false,
+            inputText: '',
             error: undefined
         };
         
@@ -16,6 +18,29 @@ class Modal extends Component {
         this.handleDayClick = this.handleDayClick.bind(this);
         this.dayModal = this.dayModal.bind(this);
         this.columnModal = this.columnModal.bind(this);
+        this.formSubmit = this.formSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+    
+    componentDidUpdate() {
+        if(this.props.showNewColumnModal) {
+            this.input.focus();
+        }
+    }
+    
+    formSubmit(event) {
+        event.preventDefault();
+        let newColumnTitle = this.state.inputText;
+            
+        this.props.onFormSubmit(newColumnTitle);
+        this.props.onClose();
+        this.setState({ inputText: '' });
+    }
+    
+    handleChange(event) {
+        let inputText = event.target.value;
+    
+        this.setState({ inputText });
     }
     
     //Сохранение выбранного дня, закрытие модалки
@@ -66,6 +91,9 @@ class Modal extends Component {
         }, 200)
     }
     
+    
+    
+    //render
     dayModal() {
         return(
             <div className="modal__content">
@@ -88,26 +116,29 @@ class Modal extends Component {
             </div>
         )
     }
-    
     columnModal() {
         return(
             <div className="modal__content">
                 <div className="modal__header">
                     <div className="modal__title">
-                        Введите заголовок новой строки расходов
+                        Введите заголовок
                     </div>
                     <i className="modal__cross material-icons" onClick={this.closeModal}>clear</i>
                 </div>
-                <form action="">
-                    <input className="modal__input" type="text"/>
-                    <button className="modal__btn">
+                <form className="modal__form" onSubmit={value => this.formSubmit(value)}>
+                    <input className="modal__input"
+                           type="text"
+                           defaultValue={this.state.inputText}
+                           onChange={event => this.handleChange(event)}
+                           ref={(input) => {this.input = input}}
+                           placeholder="Заголовок новой строки расходов" />
+                    <button className={`modal__btn ${this.state.inputText ? 'modal__btn--show' : ''}`}>
                         <i className="material-icons">done</i>
                     </button>
                 </form>
             </div>
         )
     }
-    
     render() {
         return (
             <div>

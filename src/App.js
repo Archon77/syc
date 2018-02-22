@@ -11,10 +11,10 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        //load - обновляется ли итоговая сумма, отображение лоадера
         //dayAdd - последний добавленный день
         //showModal - отображение модалки
         //showDayModal, showNewColumnModal - влияют на контент модалки
+        //load - обновляется ли итоговая сумма, отображение лоадера
         this.state = {
             table: [],
             header: [],
@@ -29,11 +29,22 @@ class App extends Component {
         this.onDaySelect = this.onDaySelect.bind(this);
         this.addDay = this.addDay.bind(this);
         this.addColumn = this.addColumn.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
+        this.tableUpdate = this.tableUpdate.bind(this);
     }
     
     addColumn() {
         this.setState({ showModal: true,
                         showNewColumnModal: true });
+    }
+    
+    onFormSubmit(title) {
+        axios.post('http://localhost:3000/api/data/header/', { title } )
+            .then(response => response.data)
+            .then(header => this.setState ({ header }))
+            .catch(error => console.error(error));
+    
+        this.tableUpdate();
     }
     
     onDaySelect(day, month) {
@@ -70,17 +81,20 @@ class App extends Component {
     }
     
     componentDidMount() {
-        //Первичная загрузка таблицы
-        axios.get('http://localhost:3000/api/data/table')
-            .then(response => response.data)
-            .then(table => this.setState({ table }))
-            .catch(error => console.error(error.message));
-    
-    
         //Первичная загрузка хедера
         axios.get('http://localhost:3000/api/data/header')
             .then(response => response.data)
             .then(header => this.setState({ header }))
+            .catch(error => console.error(error.message));
+        
+        //Первичная загрузка таблицы
+        this.tableUpdate();
+    }
+    
+    tableUpdate() {
+        axios.get('http://localhost:3000/api/data/table')
+            .then(response => response.data)
+            .then(table => this.setState({ table }))
             .catch(error => console.error(error.message));
     }
     
@@ -120,6 +134,7 @@ class App extends Component {
                            showModal={this.state.showModal}
                            table={this.state.table}
                            onClose={() => this.setState({ showModal: false, showNewColumnModal: false, showDayModal: false})}
+                           onFormSubmit={(title) => this.onFormSubmit(title)}
                            onDaySelect={(day, month) => this.onDaySelect(day, month)} />
                 </main>
             </div>

@@ -52,7 +52,7 @@
   
   &__cross {
     cursor: pointer;
-    transition: color .2s;
+    transition: .2s;
     
     &:hover {
       color: var(--blue4);
@@ -69,15 +69,41 @@
   }
   
   &__form {
-    
+    display: flex;
+    position: relative;
   }
   
   &__input {
     width: 100%;
-    padding: 5px 15px;
+    padding: 5px 35px 5px 15px;
+    border: 1px solid var(--blue);
+    border-radius: 15px;
   }
   
   &__btn {
+    position: absolute;
+    right: 7px;
+    top: 0;
+    bottom: 0;
+    background: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: .2s;
     cursor: pointer;
+    
+    &:hover {
+      color: var(--blue4);
+      transform: scale(1.1);
+    }
+    
+    &--show {
+      opacity: 1;
+      visibility: visible;
+    }
+  
+    i {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
