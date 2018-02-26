@@ -24,9 +24,28 @@
       padding: 20px;
       transition: .2s;
       text-decoration: underline transparent;
+      position: relative;
       
+      
+      
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--yellow);
+        transform: translateX(-50%);
+        transition: .2s;
+      }
+      
+      
+      &.active,
       &:hover {
-        text-decoration: underline var(--yellow);
+        &:after {
+          width: calc(100% - 40px);
+        }
       }
     }
   }

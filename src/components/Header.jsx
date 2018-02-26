@@ -1,8 +1,8 @@
 // import React, { Component } from 'react';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import loader from '../icons/loader.svg';
-
 
 function Header(props) {
     return(
@@ -14,18 +14,10 @@ function Header(props) {
                             {props.load ? <img src={loader} /> : `${props.finalSum} р.`}
                         </div>
                         <div className="header-nav">
-                            <a href="/" className="header-nav__item">
-                                Таблица
-                            </a>
-                            <a href="javascript.void(0)" className="header-nav__item">
-                                Архив
-                            </a>
-                            <a href="javascript.void(0)" className="header-nav__item">
-                                Статистика
-                            </a>
-                            <a href="javascript.void(0)" className="header-nav__item">
-                                Логин
-                            </a>
+                            <NavLink to="/" exact className="header-nav__item">Таблица</NavLink>
+                            <NavLink to="/archive" className="header-nav__item">Архив</NavLink>
+                            <NavLink to="/statistics" className="header-nav__item">Статистика</NavLink>
+                            <NavLink to="/auth" className="header-nav__item">Авторизация</NavLink>
                         </div>
                     </div>
                 </div>
