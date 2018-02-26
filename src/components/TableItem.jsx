@@ -35,7 +35,7 @@ class TableItem extends Component {
         //Отправляем id измененной ячейки и новое значение
         axios.put(`http://localhost:3000/api/data/table/${id}`, { val })
             .then(response => {
-                let value = this.state.value.map(input => {
+                let value = this.props.value.map(input => {
                     
                     //Обновление значения ячейки на значение из res
                     if(input.id === id) {
@@ -44,7 +44,7 @@ class TableItem extends Component {
 
                     return input
                 });
-
+                
                 this.calcSum(value);
                 this.setState({ value });
             })

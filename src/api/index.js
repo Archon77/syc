@@ -4,8 +4,12 @@ const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const table = require('./data/table');
-const header = require('./data/header');
+let table = require('./data/table');
+let header = require('./data/header');
+
+//empty
+let eTable = require('./data/e_table');
+let eHeader = require('./data/e_header');
 
 let headerId = 4;
 
@@ -18,9 +22,20 @@ app.use((req, res, next) => {
     next();
 });
 
-// Таблица
+//Таблица
 app.get('/api/data/table', (req, res) => {
     res.send(table);
+});
+
+//Очистка таблицы
+app.put('/api/data/table/clear', (req, res)=>{
+    table = eTable;
+    header = eHeader;
+    
+    tableUpdate();
+    headerUpdate();
+    
+    res.end();
 });
 
 //onChange всех value ячеек

@@ -66,7 +66,7 @@ class TableInner extends Component {
                                table={this.state.table}
                                calcStart={(load) => this.props.calcStart(load)}
                                calcFinalSum={(val) => this.calcFinalSum(val)}
-                               value={day.value}/>
+                               value={day.value} />
                 )}
             </div>
         )

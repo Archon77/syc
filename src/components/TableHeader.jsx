@@ -17,6 +17,7 @@ function TableInner(props) {
                 <div className="table-item__links">
                     <div className="table-item__link" onClick={() => props.addNewColumn()}>Добавить строку расходов</div>
                     <div className="table-item__link" onClick={() => props.addNewDay()}>Добавить день</div>
+                    <div className="table-item__link" onClick={() => props.clearTable()}>Сброс таблицы</div>
                 </div>
             </div>
         </div>

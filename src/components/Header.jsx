@@ -14,7 +14,7 @@ function Header(props) {
                             {props.load ? <img src={loader} /> : `${props.finalSum} р.`}
                         </div>
                         <div className="header-nav">
-                            <a href="javascript.void(0)" className="header-nav__item">
+                            <a href="/" className="header-nav__item">
                                 Таблица
                             </a>
                             <a href="javascript.void(0)" className="header-nav__item">
