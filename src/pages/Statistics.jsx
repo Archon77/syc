@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { PieChart, Legend, BarChart } from 'react-easy-chart';
 
-/* pie's style's */
+/* pie's style's что бы не перебивать !important'ом в scss */
 const customStyle = {
     '.legend': {
         backgroundColor: '#f9f9f9',
@@ -18,10 +18,13 @@ class Statistics extends Component {
     constructor(props) {
         super(props);
         
-        //cytYear - currentTableYear
+        //currentYearTable - сабж, 'cyt'
+        //currentYearTitle - текущий год, выставляется руками
+        //cytYear - currentTableYear Arr
         //cytMonthDay - диаграмма день/расход в течении выбранного месяца
         //cytMonthIoE - пирожок месяца по статьям расходов в течении выбранного месяца
-        //сtDataDisplay - выбранный месяц
+        //cytMonthIoETitle - заголовок, текущий год / выбранный месяц
+        //сtDataDisplay - выбранный месяц Obj
         //cytDataDisplayTitle - заголовок выбранного месяца
         this.state = {
             currentYearTitle: '2018',
@@ -37,8 +40,6 @@ class Statistics extends Component {
     
         this.cytMonthSelect = this.cytMonthSelect.bind(this);
     }
-        
-    //item of expenditure  - пирожок по статьям расходов
     
     componentDidMount() {
         let cytYear = [];
@@ -47,8 +48,12 @@ class Statistics extends Component {
         axios.get('http://localhost:3000/api/data/header')
             .then(response => response.data)
             .then(header => {
+                //обрезаем ячейки "дата" и "итого"
                 let cytHeader = header.slice(1, header.length - 1);
     
+                //Перепиливаем массив в пригодный для плагина пирожка
+                //id - для распределения расходов по столбцам
+                //title - "архивируем" что бы был изначальный заголовок столбца
                 cytHeader.forEach(item => {
                     let cytMonthIoEItem = {
                         id: item.id,
@@ -68,13 +73,14 @@ class Statistics extends Component {
             .then(response => response.data)
             .then(table => {
     
-                //Формирование массива для вывода годового пирожка
+                //Формирование массива для вывода основного годового пирожка
                 for(let i = 0; i < table.length; i++) {
                     let cytYearItem = {
                         key: table[i].title,
                         value: table[i].costs
                     };
                     
+                    //Выводим только не нулевые месяцы
                     if(cytYearItem.value > 0) {
                         cytYear.push(cytYearItem);
                     }
@@ -83,7 +89,6 @@ class Statistics extends Component {
                 this.setState({ currentYearTable: table, cytYear });
     
                 //Формирование массива для годового пирожка расходов
-                
                 let cytMonthIoE = this.state.cytMonthIoE;
                 
                 table.map(month => {
@@ -93,26 +98,31 @@ class Statistics extends Component {
                         })
                     })
                 });
-    
+                    
+                //Выводимые легенды дополняем суммой
                 cytMonthIoE.forEach(item => {
                     item.key += `: ${item.value}`
                 });
-                
+    
+                //Задаем контент "расходного пирожка", выставляем ему заголовок - год
                 this.setState({ cytMonthIoE, cytMonthIoETitle: this.state.currentYearTitle });
             })
             .catch(error => console.error(error.message));
     }
     
+    //При выборе месяца основной таблицы
     cytMonthSelect(event) {
         let cyTable = this.state.currentYearTable;
-        
-        this.setState({ cytDataDisplayTitle: event.data.key });
     
+        //Меняем заголовок "расходного пирожка" и диаграммы на тайтл текущего месяца
+        this.setState({ cytDataDisplayTitle: event.data.key });
+        
         cyTable.map(month => {
             if(month.title === event.data.key) {
                 let cytMonthDay = [];
-    
                 let cytMonthIoE = this.state.cytMonthIoE;
+    
+                //Обнулялем годовые значения
                 cytMonthIoE.forEach(item => {
                     item.value = 0;
                 });
@@ -129,10 +139,12 @@ class Statistics extends Component {
                         cytMonthIoE[i].value += value.val;
                     });
     
+                    //Выводимые легенды откатываем до тайтла и дополняем суммой
                     cytMonthIoE.forEach(item => {
                         item.key = `${item.title}: ${item.value}`
                     });
-                    
+    
+                    //Задаем контент "расходного пирожка", выставляем ему заголовок - выбранный месяц
                     this.setState({ cytMonthIoE, cytMonthIoETitle: this.state.cytDataDisplayTitle });
                 });
                 
@@ -142,7 +154,6 @@ class Statistics extends Component {
     }
 
 
-    
     
     render() {
         return(
@@ -157,7 +168,7 @@ class Statistics extends Component {
                             </div>
                             <div className="statistics-year__inner">
                                 <div className="statistics-year__pie">
-                                    <div className="">Выберите месяц для детальной информации</div>
+                                    <div className="statistics-year__subtitle">Выберите месяц для детальной информации</div>
                                     {this.state.cytYear ?
                                         <div>
                                             <PieChart
@@ -178,10 +189,8 @@ class Statistics extends Component {
                                 <div className="statistics-year__bar-chart">
                                     {this.state.cytMonthDay ?
                                         <div>
-                                            <div className="">Список трат сумма/день за {this.state.cytDataDisplayTitle}</div>
+                                            <div className="statistics-year__subtitle">Список трат сумма/день за {this.state.cytDataDisplayTitle}</div>
                                             <BarChart
-                                                colorBars
-                                                axisLabels={{x: 'My x Axis', y: 'My y Axis'}}
                                                 axes
                                                 width={700}
                                                 height={300}
@@ -194,7 +203,7 @@ class Statistics extends Component {
                                 </div>
     
                                 <div className="statistics-year__pie statistics-year__pie--ioe">
-                                    <div className="">Расходы за {this.state.cytMonthIoETitle}:</div>
+                                    <div className="statistics-year__subtitle">Расходы за {this.state.cytMonthIoETitle}:</div>
                                     {this.state.cytMonthIoE ?
                                         <div>
                                             <PieChart

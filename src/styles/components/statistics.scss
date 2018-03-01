@@ -8,6 +8,11 @@
       text-align: center;
     }
     
+    &__subtitle {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
     &__inner {
       display: flex;
     }
@@ -34,6 +39,10 @@
       flex-grow: 1;
       justify-content: center;
       align-items: center;
+  
+      .bar {
+        fill: var(--blue4) !important;
+      }
     }
   }
 }
