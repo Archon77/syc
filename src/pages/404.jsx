@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import coin from '../img/coin.png';
 
 class NotFound extends Component {
     constructor(props) {
@@ -8,10 +9,7 @@ class NotFound extends Component {
         return(
             <main>
                 <div className="container">
-                    
-                    
-                    <div className="">404</div>
-                
+                    <div className="notFound">4 <img src={coin}/> 4</div>
                 </div>
             </main>
         )

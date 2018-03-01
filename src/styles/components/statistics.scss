@@ -1,0 +1,39 @@
+
+.statistics {
+  &-year {
+    height: 300px;
+    
+    &__title {
+      font-size: 40px;
+      text-align: center;
+    }
+    
+    &__inner {
+      display: flex;
+    }
+    
+    &__pie {
+      width: 300px;
+      animation: fadeIn .5s;
+  
+      &--ioe {
+        margin-left: auto;
+        .pie-chart-slice {
+          cursor: default;
+        }
+      }
+      
+      .pie-chart {
+        &-slice {
+          cursor: pointer;
+        }
+      }
+    }
+    &__bar-chart {
+      display: flex;
+      flex-grow: 1;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

@@ -28,8 +28,7 @@ class TableInner extends Component {
         axios.put('http://localhost:3000/api/data/table/', { monthId, val })
             .then(response => response.data)
             .then(table => {
-                this.setState({ table,
-                                profit: val  });
+                this.setState({ table, profit: val  });
                 this.calcFinalSum(this.state.sum);
             })
             .catch(error => console.error(error));
@@ -63,6 +62,7 @@ class TableInner extends Component {
                 {this.props.days.map(day =>
                     <TableItem key={day.id}
                                title={day.title}
+                               monthId ={this.props.monthId}
                                table={this.state.table}
                                calcStart={(load) => this.props.calcStart(load)}
                                calcFinalSum={(val) => this.calcFinalSum(val)}

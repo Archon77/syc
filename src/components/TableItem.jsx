@@ -9,7 +9,8 @@ class TableItem extends Component {
 
         this.state = {
             table: this.props.table,
-            value: this.props.value
+            value: this.props.value,
+            costs: 0
         };
 
         this.onChange = this.onChange.bind(this);
@@ -53,13 +54,19 @@ class TableItem extends Component {
 
     //Сумма расходов дня
     calcSum(values, init) {
-        this.sum = 0;
+        let costs = 0;
+        let dayId = `${this.props.monthId}-${this.props.title}`;
         
         if(values !== undefined) {
             values.map(value => {
-                this.sum += parseInt(value.val, 10);
+                costs += parseInt(value.val, 10);
             })
         }
+        
+        this.setState({ costs });
+    
+        axios.put('http://localhost:3000/table/day/costs', {dayId, costs})
+            .catch(error => console.error(error));
         
         this.finalSum(init);
     }
@@ -110,7 +117,7 @@ class TableItem extends Component {
                                    val={cell.val}
                                    content={true} />
                     )}
-                    <TableCell sum={true}>{this.sum}</TableCell>
+                    <TableCell sum={true}>{this.state.costs}</TableCell>
                 </div>
             </div>
         );

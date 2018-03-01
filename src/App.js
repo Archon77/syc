@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from './components/Header';
 import Home from './pages/Home'
@@ -28,18 +28,20 @@ class App extends Component {
                     <Header finalSum={this.state.finalSum}
                             load={this.state.load} />
     
-                    <Route exact
-                           path="/"
-                           render={routeProps => <Home {...routeProps}
-                                                       calcStart={(load) => this.setState({ load })}
-                                                       calcFinalSum={(finalSum, load) => this.setState({ finalSum, load })} />} />
-                    <Route path="/archive"
-                           component={Archive} />
-                    <Route path="/statistics"
-                           component={Statistics} />
-                    <Route path="/auth"
-                           component={Authorization} />
-                    {/*<Route component={NotFound} />*/}
+                    <Switch>
+                        <Route exact
+                               path="/"
+                               render={routeProps => <Home {...routeProps}
+                                                           calcStart={(load) => this.setState({ load })}
+                                                           calcFinalSum={(finalSum, load) => this.setState({ finalSum, load })} />} />
+                        <Route path="/archive"
+                               component={Archive} />
+                        <Route path="/statistics"
+                               component={Statistics} />
+                        <Route path="/auth"
+                               component={Authorization} />
+                        <Route component={NotFound} />
+                    </Switch>
                 </div>
             </Router>
         );

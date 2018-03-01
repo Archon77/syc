@@ -79,6 +79,29 @@ app.put('/api/data/table/', (req, res) => {
     });
 });
 
+//Изменение расходов дня
+app.put('/table/day/costs', (req, res) => {
+    table.map(month => {
+        let mCosts = 0;
+
+        month.days.map(day => {
+            //Если id месяца соответствует id запроса
+            if(day.id === req.body.dayId){
+
+                //Заменить его значение профита на значение из запроса
+                day.costs = parseInt(req.body.costs, 10);
+            }
+            mCosts += day.costs;
+        });
+
+        month.costs = mCosts;
+    });
+    
+    tableUpdate();
+    
+    res.end();
+});
+
 // Добавление нового дня
 app.post('/api/data/table/', (req, res) => {
     //month - req id месяца

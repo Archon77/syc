@@ -54,3 +54,23 @@ button {
 p {
   margin: 0;
 }
+
+.notFound {
+  text-align: center;
+  font-size: 260px;
+  
+  img {
+    margin: 0 -100px;
+  }
+}
+
+
+
+@keyframes fadeIn {
+  from {
+    transform: scale(.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}

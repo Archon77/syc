@@ -2,7 +2,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import loader from '../icons/loader.svg';
+import loader from '../img/loader.svg';
 
 function Header(props) {
     return(
