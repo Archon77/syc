@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding-bottom: 40px;
+  //overflow: auto;
   
   &__inner:not(:first-of-type) {
     animation: fadeIn .5s;

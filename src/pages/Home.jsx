@@ -5,9 +5,28 @@ import TableHeader from '../components/TableHeader';
 import TableInner from '../components/TableInner';
 import Modal from '../components/Modal';
 
+
+//Пул месяцев для определения monthTitle и передачи на создание нового месяца
+const monthList = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь'
+];
+
 class Home extends Component {
     constructor(props) {
         super(props);
+        
+        console.log('Home', props);
         
         //dayAdd - последний добавленный день
         //showModal - отображение модалки
@@ -23,7 +42,6 @@ class Home extends Component {
         };
         
         this.onDaySelect = this.onDaySelect.bind(this);
-        this.addDay = this.addDay.bind(this);
         this.addColumn = this.addColumn.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.clearTable = this.clearTable.bind(this);
@@ -38,7 +56,7 @@ class Home extends Component {
     
     addColumn() {
         this.setState({ showModal: true,
-            showNewColumnModal: true });
+                        showNewColumnModal: true });
     }
     
     onFormSubmit(title) {
@@ -52,29 +70,13 @@ class Home extends Component {
     
     onDaySelect(day, month) {
         this.setState({ dayAdd: day,
-            showDayModal: false });
+                        showDayModal: false });
         
         this.addDay(day, month);
     }
     
     //Добавление нового дня
     addDay(day, month) {
-        
-        //Пул месяцев для определения monthTitle и передачи на создание нового месяца
-        const monthList = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь'
-        ];
         let monthTitle = monthList[month - 1];
         
         axios.post(`http://localhost:3000/api/data/table/`, { day, month, monthTitle })
@@ -143,8 +145,5 @@ class Home extends Component {
         )
     }
 }
-
-
-// calcFinalSum={(finalSum) => this.props.calcFinalSum(finalSum, false)}
 
 export default Home;

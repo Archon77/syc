@@ -14,10 +14,16 @@ function Header(props) {
                             {props.load ? <img src={loader} /> : `${props.finalSum} р.`}
                         </div>
                         <div className="header-nav">
-                            <NavLink to="/" exact className="header-nav__item">Таблица</NavLink>
-                            <NavLink to="/archive" className="header-nav__item">Архив</NavLink>
+                            <NavLink to="/" exact className="header-nav__item">Таблица расходов</NavLink>
+                            {/*<NavLink to="/archive" className="header-nav__item">Архив</NavLink>*/}
                             <NavLink to="/statistics" className="header-nav__item">Статистика</NavLink>
-                            <NavLink to="/auth" className="header-nav__item">Авторизация</NavLink>
+                            {!props.isAuth ?
+                                <NavLink to="/auth" className="header-nav__item">
+                                    Авторизация
+                                </NavLink>
+                                :
+                                <div className="header-nav__item" onClick={() => props.onLogout()}>Выход</div>
+                            }
                         </div>
                     </div>
                 </div>

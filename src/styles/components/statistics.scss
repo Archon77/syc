@@ -19,7 +19,6 @@
     
     &__pie {
       width: 300px;
-      animation: fadeIn .5s;
   
       &--ioe {
         margin-left: auto;
@@ -32,6 +31,11 @@
         &-slice {
           cursor: pointer;
         }
+      }
+      //pie-chart-...
+      .statistics-year__subtitle + div > div:first-of-type {
+        height: 300px;
+        animation: fadeIn .5s;
       }
     }
     &__bar-chart {

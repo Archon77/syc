@@ -1,0 +1,49 @@
+
+.auth {
+  
+  &__inner {
+    width: 360px;
+    margin: 150px auto;
+    padding: 30px;
+    background: var(--blue5);
+    border-radius: 15px;
+    text-align: center;
+  
+    animation: fadeIn .5s;
+  }
+  &__input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 7px 15px;
+    border-radius: 15px;
+    border: 1px solid var(--blue);
+    transition: .2s;
+    
+    &.error {
+      border-color: var(--red);
+    }
+  }
+  &__btn {
+    width: 50%;
+    padding: 10px;
+    background-color: var(--blue);
+    border-radius: 15px;
+    text-align: center;
+    color: var(--yellow5);
+    cursor: pointer;
+    transition: .2s;
+    
+    &:hover {
+      color: var(--yellow);
+    }
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  &__error {
+    color: var(--red);
+    margin-top: 5px;
+    margin-bottom: -23px;
+  }
+}

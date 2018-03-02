@@ -45,6 +45,9 @@ class TableInner extends Component {
         this.setState({ sum: val });
         
         val += sum;
+    
+        //Зазибваем finalSum в куки на неделю без кодирования
+        document.cookie = `finalSum=${val};Max-Age=604800;`;
         
         this.props.calcFinalSum(val);
     }

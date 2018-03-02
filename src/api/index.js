@@ -85,12 +85,14 @@ app.put('/table/day/costs', (req, res) => {
         let mCosts = 0;
 
         month.days.map(day => {
-            //Если id месяца соответствует id запроса
+            //Если id дня соответствует id запроса
             if(day.id === req.body.dayId){
 
-                //Заменить его значение профита на значение из запроса
+                //Заменить его значение расходов на значение из запроса
                 day.costs = parseInt(req.body.costs, 10);
             }
+            
+            //Итог расходов дня добавить в итог расходов месяца
             mCosts += day.costs;
         });
 
@@ -99,6 +101,7 @@ app.put('/table/day/costs', (req, res) => {
     
     tableUpdate();
     
+    //Ничего не возвращать, вся операция только для чтения страницой статистики
     res.end();
 });
 
@@ -124,6 +127,7 @@ app.post('/api/data/table/', (req, res) => {
     const newDay = {
         id: `${req.body.month}-${req.body.day}`,
         title: parseInt(req.body.day, 10),
+        costs: 0,
         value: values
     };
     
@@ -131,6 +135,7 @@ app.post('/api/data/table/', (req, res) => {
         id: req.body.month,
         title: req.body.monthTitle,
         profit: 0,
+        costs: 0,
         days: [
             newDay
         ]
